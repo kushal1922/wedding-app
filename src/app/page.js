@@ -17,6 +17,8 @@ const FadeIn = ({ children, delay = 0 }) => (
 function ScratchReveal({ children, coverClassName }) {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
+  const lastPointRef = useRef(null);
+  const scratchCountRef = useRef(0);
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
@@ -24,6 +26,7 @@ function ScratchReveal({ children, coverClassName }) {
     if (!canvas) return;
 
     const drawCover = () => {
+      if (revealed) return;
       const rect = canvas.getBoundingClientRect();
       const ratio = window.devicePixelRatio || 1;
       canvas.width = rect.width * ratio;
@@ -41,7 +44,7 @@ function ScratchReveal({ children, coverClassName }) {
     drawCover();
     window.addEventListener("resize", drawCover);
     return () => window.removeEventListener("resize", drawCover);
-  }, []);
+  }, [revealed]);
 
   const scratch = (event) => {
     if (!drawingRef.current || revealed) return;
@@ -52,16 +55,26 @@ function ScratchReveal({ children, coverClassName }) {
     const y = event.clientY - rect.top;
 
     context.globalCompositeOperation = "destination-out";
+    context.lineWidth = 72;
+    context.lineCap = "round";
+    context.lineJoin = "round";
     context.beginPath();
-    context.arc(x, y, 24, 0, Math.PI * 2);
-    context.fill();
+    if (lastPointRef.current) {
+      context.moveTo(lastPointRef.current.x, lastPointRef.current.y);
+      context.lineTo(x, y);
+      context.stroke();
+    } else {
+      context.arc(x, y, 36, 0, Math.PI * 2);
+      context.fill();
+    }
+    lastPointRef.current = { x, y };
 
     const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
     let cleared = 0;
     for (let index = 3; index < pixels.length; index += 64) {
       if (pixels[index] === 0) cleared += 1;
     }
-    if (cleared / (pixels.length / 64) > 0.45) setRevealed(true);
+    if (cleared / (pixels.length / 64) > 0.25) setRevealed(true);
   };
 
   return (
@@ -73,15 +86,20 @@ function ScratchReveal({ children, coverClassName }) {
         className={`absolute inset-0 h-full w-full touch-none cursor-crosshair transition-opacity duration-700 ${coverClassName} ${revealed ? "pointer-events-none opacity-0" : ""}`}
         onPointerDown={(event) => {
           drawingRef.current = true;
+          lastPointRef.current = null;
+          scratchCountRef.current += 1;
           event.currentTarget.setPointerCapture(event.pointerId);
           scratch(event);
+          if (scratchCountRef.current >= 3) setRevealed(true);
         }}
         onPointerMove={scratch}
         onPointerUp={() => {
           drawingRef.current = false;
+          lastPointRef.current = null;
         }}
         onPointerCancel={() => {
           drawingRef.current = false;
+          lastPointRef.current = null;
         }}
       />
     </div>
@@ -177,6 +195,7 @@ export default function WeddingInvitation() {
   }, []);
 
   const enterInvitation = () => {
+    window.scrollTo(0, 0);
     setHasEntered(true);
     audioRef.current?.play().catch(() => undefined);
   };
