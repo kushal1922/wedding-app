@@ -121,6 +121,9 @@ const littleThings = [
   },
 ];
 
+const mapUrl =
+  "https://google.com/maps?rlz=1C1GCEA_enIN1112IN1112&gs_lcrp=EgZjaHJvbWUqEAgBEC4YrwEYxwEYgAQYmAUyBggAEEUYOTIQCAEQLhivARjHARiABBiYBTIICAIQABgWGB4yCggDEAAYgAQYogQyBwgEEAAY7wUyCggFEAAYgAQYogQyCggGEAAYgAQYogQyCggHEAAYgAQYogTSAQg4MjEyajBqN6gCALACAA&um=1&ie=UTF-8&fb=1&gl=in&sa=X&geocode=KZEJJ3cA3_Q5MfoXbOr3AnAu&daddr=Daladili+Rd,+Ranchi,+Gutuwa,+Jharkhand+834005";
+
 function LittleThings() {
   const [activeThing, setActiveThing] = useState(0);
 
@@ -351,9 +354,9 @@ export default function WeddingInvitation() {
             </motion.h2>
           </FadeIn>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="flex justify-center">
             {/* Wedding Ceremony */}
-            <FadeIn delay={0.2}>
+            {/* <FadeIn delay={0.2}>
               <motion.div
                 whileHover={{ y: -8 }}
                 whileTap={{ scale: 0.98 }}
@@ -380,7 +383,7 @@ export default function WeddingInvitation() {
                   </div>
                 </ScratchReveal>
               </motion.div>
-            </FadeIn>
+            </FadeIn> */}
 
             {/* Reception */}
             <FadeIn delay={0.4}>
@@ -388,7 +391,7 @@ export default function WeddingInvitation() {
                 whileHover={{ y: -8 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="h-full"
+                className="h-full w-full max-w-md"
               >
                 <ScratchReveal>
                   <div className="bg-rose-900 text-rose-50 p-8 rounded-2xl shadow-sm text-center h-full">
@@ -399,9 +402,15 @@ export default function WeddingInvitation() {
                     </p>
                     <div className="flex items-center justify-center text-rose-50 mb-2">
                       <Clock className="w-4 h-4 mr-2" />
-                      <span>Evening Follows</span>
+                      <span>7:00PM Onwards</span>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-rose-50 mt-6">
+                    <a
+                      href={mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open Larang Villa location in Google Maps"
+                      className="mt-6 flex flex-col items-center justify-center text-rose-50 transition-opacity hover:opacity-85"
+                    >
                       <MapPin className="w-4 h-4 mb-2 text-rose-300" />
                       <span className="font-medium">Larang Villa</span>
                       <span className="text-sm text-rose-200 mt-1">
@@ -410,7 +419,7 @@ export default function WeddingInvitation() {
                       <span className="text-sm text-rose-200">
                         Ranchi, Jharkhand 834005
                       </span>
-                    </div>
+                    </a>
                   </div>
                 </ScratchReveal>
               </motion.div>
