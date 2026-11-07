@@ -354,14 +354,14 @@ export default function WeddingInvitation() {
             </motion.h2>
           </FadeIn>
 
-          <div className="flex justify-center">
+          <div className="mx-auto grid max-w-4xl grid-cols-1 items-stretch gap-8 md:grid-cols-2">
             {/* Wedding Ceremony */}
-            {/* <FadeIn delay={0.2}>
+            <FadeIn delay={0.2}>
               <motion.div
                 whileHover={{ y: -8 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="h-full"
+                className="h-full w-full"
               >
                 <ScratchReveal>
                   <div className="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 text-center h-full">
@@ -383,15 +383,14 @@ export default function WeddingInvitation() {
                   </div>
                 </ScratchReveal>
               </motion.div>
-            </FadeIn> */}
-
+            </FadeIn>
             {/* Reception */}
             <FadeIn delay={0.4}>
               <motion.div
                 whileHover={{ y: -8 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.25 }}
-                className="h-full w-full max-w-md"
+                className="h-full w-full"
               >
                 <ScratchReveal>
                   <div className="bg-rose-900 text-rose-50 p-8 rounded-2xl shadow-sm text-center h-full">
